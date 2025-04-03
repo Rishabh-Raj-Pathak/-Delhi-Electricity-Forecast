@@ -19,11 +19,27 @@ export default function AboutPage() {
 
   const teamMembers = [
     {
-      name: "Your Name",
-      role: "Project Lead",
-      image: "/placeholder-avatar.jpg",
+      name: "Rishabh Raj Pathak",
+      // role: "Project Lead & Full Stack Developer",
+      contribution:
+        "Led project development, implemented frontend & backend integration",
     },
-    // Add other team members here
+    {
+      name: "Sahil",
+      // role: "ML Engineer",
+      contribution: "Developed and trained the demand forecasting model",
+    },
+    {
+      name: "Shatru Bonerjee",
+      // role: "Data Scientist",
+      contribution:
+        "Data preprocessing, feature engineering, and model evaluation",
+    },
+    {
+      name: "Varun",
+      // role: "UI/UX Designer",
+      contribution: "Designed user interface",
+    },
   ];
 
   const techStack = [
@@ -84,12 +100,18 @@ export default function AboutPage() {
         {/* Team */}
         <div className="card p-6 rounded-xl mb-8">
           <h2 className="text-2xl font-semibold mb-4">Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamMembers.map((member, index) => (
-              <div key={index} className="text-center">
-                <div className="w-32 h-32 mx-auto bg-slate-700 rounded-full mb-4" />
-                <h3 className="text-lg font-semibold">{member.name}</h3>
-                <p className="text-gray-400">{member.role}</p>
+              <div
+                key={index}
+                className="text-center p-4 bg-slate-800 rounded-lg"
+              >
+                <div className="w-24 h-24 mx-auto bg-slate-700 rounded-full mb-4" />
+                <h3 className="text-lg font-semibold text-blue-400">
+                  {member.name}
+                </h3>
+                <p className="text-gray-300 font-medium mb-2">{member.role}</p>
+                <p className="text-gray-400 text-sm">{member.contribution}</p>
               </div>
             ))}
           </div>

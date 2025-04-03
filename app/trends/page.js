@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DemandChart from "../components/DemandChart";
@@ -15,6 +15,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { getDelhiInsights } from "../data/delhiDemandPatterns";
 
 ChartJS.register(
   CategoryScale,
@@ -36,6 +37,53 @@ export default function TrendsPage() {
   defaultStartDate.setDate(defaultStartDate.getDate() - 7);
 
   const [dateRange, setDateRange] = useState([defaultStartDate, new Date()]);
+  const [insights, setInsights] = useState([]);
+  const [stats, setStats] = useState({
+    avgDemand: 0,
+    peakDemand: 0,
+    weekendAvg: 0,
+    weekdayAvg: 0,
+  });
+
+  // Update insights and stats when date range changes
+  useEffect(() => {
+    if (dateRange[0] && dateRange[1]) {
+      // Get Delhi-specific insights based on date range
+      const delhiInsights = getDelhiInsights(dateRange[0], dateRange[1]);
+      setInsights(delhiInsights);
+
+      // Calculate statistics from filtered data
+      const filtered = historicalData.filter((item) => {
+        const itemDate = new Date(item.date);
+        return itemDate >= dateRange[0] && itemDate <= dateRange[1];
+      });
+
+      if (filtered.length > 0) {
+        const weekdayData = filtered.filter((item) => !item.isWeekend);
+        const weekendData = filtered.filter((item) => item.isWeekend);
+
+        setStats({
+          avgDemand: Math.round(
+            filtered.reduce((acc, curr) => acc + curr.predicted, 0) /
+              filtered.length
+          ),
+          peakDemand: Math.max(...filtered.map((item) => item.predicted)),
+          weekendAvg: weekendData.length
+            ? Math.round(
+                weekendData.reduce((acc, curr) => acc + curr.predicted, 0) /
+                  weekendData.length
+              )
+            : 0,
+          weekdayAvg: weekdayData.length
+            ? Math.round(
+                weekdayData.reduce((acc, curr) => acc + curr.predicted, 0) /
+                  weekdayData.length
+              )
+            : 0,
+        });
+      }
+    }
+  }, [dateRange]);
 
   // Filter data based on selected date range
   const filteredData = historicalData.filter((item) => {
@@ -95,21 +143,6 @@ export default function TrendsPage() {
     },
   };
 
-  const insights = [
-    {
-      title: "Peak Usage Forecast",
-      description: "Highest demand expected between 2 PM - 4 PM",
-    },
-    {
-      title: "Weekly Forecast",
-      description: "Weekday demand predicted to be 20% higher than weekends",
-    },
-    {
-      title: "Monthly Forecast",
-      description: "June expected to show highest demand due to cooling needs",
-    },
-  ];
-
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white">
       <div className="container mx-auto px-4 py-8">
@@ -118,8 +151,8 @@ export default function TrendsPage() {
         </h1>
 
         {/* Filters */}
-        <div className="card p-6 rounded-xl mb-8">
-          <div className="flex flex-wrap gap-4 items-center">
+        <div className="card p-6 rounded-xl mb-8 bg-slate-800">
+          <div className="flex flex-wrap gap-4 items-center justify-between">
             <div>
               <label className="block text-sm text-gray-400 mb-1">
                 Date Range
@@ -133,32 +166,71 @@ export default function TrendsPage() {
                 dateFormat="yyyy-MM-dd"
               />
             </div>
+
+            {/* Statistics Summary */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="bg-slate-700 p-3 rounded-lg">
+                <div className="text-sm text-gray-400">Average Demand</div>
+                <div className="text-xl font-semibold">
+                  {stats.avgDemand.toLocaleString()} MW
+                </div>
+              </div>
+              <div className="bg-slate-700 p-3 rounded-lg">
+                <div className="text-sm text-gray-400">Peak Demand</div>
+                <div className="text-xl font-semibold">
+                  {stats.peakDemand.toLocaleString()} MW
+                </div>
+              </div>
+              <div className="bg-slate-700 p-3 rounded-lg">
+                <div className="text-sm text-gray-400">Weekday Average</div>
+                <div className="text-xl font-semibold">
+                  {stats.weekdayAvg.toLocaleString()} MW
+                </div>
+              </div>
+              <div className="bg-slate-700 p-3 rounded-lg">
+                <div className="text-sm text-gray-400">Weekend Average</div>
+                <div className="text-xl font-semibold">
+                  {stats.weekendAvg.toLocaleString()} MW
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="card p-6 rounded-xl">
+          <div className="card p-6 rounded-xl bg-slate-800">
             <DemandChart
               data={filteredData}
               title="Historical Demand Forecast Trends"
             />
           </div>
-          <div className="card p-6 rounded-xl">
+          <div className="card p-6 rounded-xl bg-slate-800">
             <Bar options={barOptions} data={barChartData} />
           </div>
         </div>
 
         {/* Insights */}
-        <div className="card p-6 rounded-xl">
-          <h2 className="text-xl font-semibold mb-4">Key Insights</h2>
+        <div className="card p-6 rounded-xl bg-slate-800">
+          <h2 className="text-xl font-semibold mb-4">Key Insights for Delhi</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {insights.map((insight, index) => (
-              <div key={index} className="p-4 bg-slate-800 rounded-lg">
+              <div
+                key={index}
+                className={`p-4 rounded-lg h-full transform transition-transform hover:scale-102 hover:shadow-lg ${
+                  insight.type === "seasonal"
+                    ? "bg-blue-900/50"
+                    : insight.type === "festival"
+                    ? "bg-purple-900/50"
+                    : insight.type === "special"
+                    ? "bg-red-900/50"
+                    : "bg-slate-700"
+                }`}
+              >
                 <h3 className="font-semibold text-blue-400 mb-2">
                   {insight.title}
                 </h3>
-                <p className="text-gray-300">{insight.description}</p>
+                <p className="text-gray-300 text-sm">{insight.description}</p>
               </div>
             ))}
           </div>

@@ -1,0 +1,125 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- You can @ files here
+- You can use markdown but dont have to
+
+# **Delhi Electricity Demand Forecasting Web Application**  
+
+## **Project Description**  
+This is a **college project** to build a simple web application for forecasting electricity demand in Delhi using a **pre-trained machine learning model**. The app will:  
+- Display **mock "real-time"** and **historical** electricity demand data.  
+- Provide **precomputed demand predictions**.  
+- Offer **basic power management insights**.  
+- Have **five pages**:  
+  1. **Home (Dashboard)**  
+  2. **Historical Trends**  
+  3. **Forecasting**  
+  4. **Alerts & Recommendations**  
+  5. **About & Contact**  
+
+### **Key Considerations**  
+✅ **Mock Data Only**: No need for real-time updates or a live ML model—use **precomputed data** stored in JSON files.  
+✅ **No Database**: Use **local JSON files** instead of a database.  
+✅ **Simplified Backend**: Use **Next.js API routes** for backend logic (no need for FastAPI).  
+✅ **Static Alerts & Insights**: Precompute alerts and recommendations.  
+✅ **Minimal Deployment**: Focus on **Vercel hosting** or local demo.  
+
+---
+
+## **Pages & Features**  
+
+### **1️⃣ Home Page (Dashboard)**  
+📌 Displays **mock "real-time"** Delhi power grid status (precomputed/static).  
+📌 **Graph**: Today's **demand vs. predicted demand**.  
+📌 **Peak Demand Alert**: Static message (e.g., *"Peak demand expected at 3 PM"*).  
+📌 **Energy Source Breakdown**: Pie chart showing **Coal, Solar, Wind, etc.**  
+
+🖥️ **UI Components**:  
+✔️ Data Cards  
+✔️ Interactive Graph (Chart.js)  
+✔️ Pie Chart for Energy Breakdown  
+
+---
+
+### **2️⃣ Historical Trends Page**  
+📌 **View past electricity trends** (mock data from JSON).  
+📌 **Date Range Selection**: Select a range (e.g., last 30 days).  
+📌 **Graph**: Demand trends over the selected period.  
+
+🖥️ **UI Components**:  
+✔️ Date Range Picker (react-datepicker)  
+✔️ Line Chart for demand trends  
+
+---
+
+### **3️⃣ Forecasting Page**  
+📌 **View precomputed demand predictions** for the next **day/week** (from JSON).  
+📌 **Input a date** → Get predicted demand.  
+📌 **Graph**: Compare actual vs. predicted demand.  
+
+🖥️ **UI Components**:  
+✔️ Date Input Field  
+✔️ Line Chart (Actual vs. Predicted)  
+
+---
+
+### **4️⃣ Alerts & Recommendations Page**  
+📌 **Static Peak Load Warning** (e.g., *"High demand expected at 3 PM"*).  
+📌 **Static Energy-Saving Tip** (e.g., *"Use appliances during low-demand hours"*).  
+
+🖥️ **UI Components**:  
+✔️ Card-based Layout  
+✔️ Text-based Alerts & Insights  
+
+---
+
+### **5️⃣ About & Contact Page**  
+📌 **Project Explanation** (e.g., *"This app uses ML to predict demand"*).  
+📌 **Data Sources**: Delhi Electricity Board Statistics.  
+📌 **Simple Contact Form** *(UI only, no backend processing)*.  
+
+🖥️ **UI Components**:  
+✔️ Static Text  
+✔️ Basic Contact Form  
+
+---
+
+## **Tech Stack**  
+
+### **📌 Frontend & Backend**  
+- **Next.js** → For UI & backend API routes.  
+- **Chart.js** (via react-chartjs-2) → Graphs & charts.  
+- **react-datepicker** → Date selection.  
+- **Bootstrap** (via react-bootstrap) → Basic styling.  
+
+### **📌 Data Storage**  
+- **JSON Files** → Store mock **historical data** (`historical_data.json`) and **precomputed predictions** (`predictions.json`).  
+- **No database required**.  
+
+### **📌 Machine Learning**  
+- **Precomputed Predictions** → Use static JSON data (e.g., XGBoost-generated predictions).  
+- **No dynamic ML inference**.  
+
+### **📌 Deployment**  
+- **Vercel** → Host the Next.js app (free & simple).  
+- **Alternatively**: Run locally (`npm run dev`).  
+
+---
+
+## **Notes for Cursor**  
+⚡ **Use mock data** & **static alerts** to keep it simple.  
+⚡ **Fake & precompute** "real-time" updates, predictions, and alerts.  
+⚡ **Ensure functionality** → All pages and graphs should work with **mock data**.  
+⚡ **Use Next.js API routes** for backend logic (**no FastAPI**).  
+⚡ **Generate code snippets** for components, API routes, and pages as needed.  
+⚡ **Keep it minimal** → Designed for a **college project** with **limited users**.  
+
+---
+
+This format makes the document **structured, clear, and easy to read**. Let me know if you need further refinements! 🚀
