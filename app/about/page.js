@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 export default function AboutPage() {
   const [formData, setFormData] = useState({
@@ -19,26 +20,32 @@ export default function AboutPage() {
 
   const teamMembers = [
     {
-      name: "Rishabh Raj Pathak",
+      name: "Sahil Chakraborthy (2105483)",
       // role: "Project Lead & Full Stack Developer",
       contribution:
-        "Led project development, implemented frontend & backend integration",
+        "Worked on training the machine learning model, optimizing its accuracy, and fine-tuning hyperparameters for better performance.",
+      avatar: "/team/sahil.jpg",
     },
     {
-      name: "Sahil",
+      name: "Varun Sinha (2105510)",
       // role: "ML Engineer",
-      contribution: "Developed and trained the demand forecasting model",
+      contribution:
+        "Designed and implemented the Key Insights feature in the Trends section, summarizing important electricity demand patterns and providing actionable insights.",
+      avatar: "/team/varun.jpg",
     },
     {
-      name: "Shatru Bonerjee",
+      name: "Rishabh Raj Pathak (2105567)",
       // role: "Data Scientist",
       contribution:
-        "Data preprocessing, feature engineering, and model evaluation",
+        "Developed the core backend and led frontend-backend integration. Built the Dashboard, Forecast, and Trends pages with interactive charts and real-time visualizations.",
+      avatar: "/team/rishabh.jpg",
     },
     {
-      name: "Varun",
+      name: "Shatadru Banerjee (2105580)",
       // role: "UI/UX Designer",
-      contribution: "Designed user interface",
+      contribution:
+        "Focused on model training, ensuring efficient data preprocessing, selecting the best algorithms, and improving prediction reliability.",
+      avatar: "/team/shatadru.jpg",
     },
   ];
 
@@ -104,14 +111,40 @@ export default function AboutPage() {
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="text-center p-4 bg-slate-800 rounded-lg"
+                className="text-center p-6 bg-slate-800 rounded-lg transform transition-all hover:scale-105 hover:shadow-xl"
               >
-                <div className="w-24 h-24 mx-auto bg-slate-700 rounded-full mb-4" />
-                <h3 className="text-lg font-semibold text-blue-400">
+                <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-500/30">
+                  {member.avatar ? (
+                    <Image
+                      src={member.avatar}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      onError={(e) => {
+                        // Fallback to initials if image fails to load
+                        e.target.style.display = "none";
+                        e.target.nextSibling.style.display = "flex";
+                      }}
+                    />
+                  ) : null}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-2xl font-bold text-white ${
+                      member.avatar ? "hidden" : "flex"
+                    }`}
+                  >
+                    {member.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .slice(0, 2)
+                      .join("")}
+                  </div>
+                </div>
+                <h3 className="text-lg font-semibold text-blue-400 mb-2">
                   {member.name}
                 </h3>
-                <p className="text-gray-300 font-medium mb-2">{member.role}</p>
-                <p className="text-gray-400 text-sm">{member.contribution}</p>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {member.contribution}
+                </p>
               </div>
             ))}
           </div>

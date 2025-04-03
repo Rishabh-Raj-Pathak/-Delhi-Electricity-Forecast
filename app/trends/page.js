@@ -16,6 +16,15 @@ import {
   Legend,
 } from "chart.js";
 import { getDelhiInsights } from "../data/delhiDemandPatterns";
+import {
+  SunIcon,
+  CloudIcon,
+  SnowflakeIcon,
+  SparklesIcon,
+  FireIcon,
+  ExclamationTriangleIcon,
+  ChartBarIcon,
+} from "@heroicons/react/24/outline";
 
 ChartJS.register(
   CategoryScale,
@@ -227,10 +236,48 @@ export default function TrendsPage() {
                     : "bg-slate-700"
                 }`}
               >
-                <h3 className="font-semibold text-blue-400 mb-2">
-                  {insight.title}
-                </h3>
-                <p className="text-gray-300 text-sm">{insight.description}</p>
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    {insight.type === "seasonal" &&
+                      insight.title.toLowerCase().includes("summer") && (
+                        <SunIcon className="h-6 w-6 text-yellow-400" />
+                      )}
+                    {insight.type === "seasonal" &&
+                      insight.title.toLowerCase().includes("monsoon") && (
+                        <CloudIcon className="h-6 w-6 text-blue-400" />
+                      )}
+                    {insight.type === "seasonal" &&
+                      insight.title.toLowerCase().includes("winter") && (
+                        <SnowflakeIcon className="h-6 w-6 text-cyan-400" />
+                      )}
+                    {insight.type === "seasonal" &&
+                      insight.title.toLowerCase().includes("moderate") && (
+                        <SparklesIcon className="h-6 w-6 text-green-400" />
+                      )}
+                    {insight.type === "festival" && (
+                      <SparklesIcon className="h-6 w-6 text-purple-400" />
+                    )}
+                    {insight.type === "special" &&
+                      insight.title.toLowerCase().includes("heatwave") && (
+                        <FireIcon className="h-6 w-6 text-red-400" />
+                      )}
+                    {insight.type === "special" &&
+                      insight.title.toLowerCase().includes("cold") && (
+                        <SnowflakeIcon className="h-6 w-6 text-blue-400" />
+                      )}
+                    {insight.type === "general" && (
+                      <ChartBarIcon className="h-6 w-6 text-gray-400" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-blue-400 mb-2">
+                      {insight.title}
+                    </h3>
+                    <p className="text-gray-300 text-sm">
+                      {insight.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
